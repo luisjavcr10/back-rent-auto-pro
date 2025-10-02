@@ -57,7 +57,7 @@ Rental.belongsTo(Vehicle, {
 
 Rental.belongsTo(User, { 
   foreignKey: 'created_by', 
-  as: 'createdBy' 
+  as: 'creator' 
 });
 
 // Maintenance associations
@@ -68,7 +68,7 @@ Maintenance.belongsTo(Vehicle, {
 
 Maintenance.belongsTo(User, { 
   foreignKey: 'created_by', 
-  as: 'createdBy' 
+  as: 'creator' 
 });
 
 Maintenance.belongsTo(User, { 

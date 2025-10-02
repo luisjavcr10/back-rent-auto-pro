@@ -284,6 +284,34 @@ const updateUser = async (req, res) => {
   }
 };
 
+/**
+ * Test endpoint for debugging auth
+ */
+const testAuth = async (req, res) => {
+  try {
+    console.log('🧪 Test Auth - User from req:', req.user ? { id: req.user.id, role: req.user.role } : 'null');
+    
+    res.json({
+      success: true,
+      message: 'Autenticación exitosa',
+      data: {
+        user: req.user ? {
+          id: req.user.id,
+          email: req.user.email,
+          role: req.user.role,
+          is_active: req.user.is_active
+        } : null
+      }
+    });
+  } catch (error) {
+    console.error('Test auth error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor'
+    });
+  }
+};
+
 module.exports = {
   login,
   register,
@@ -291,5 +319,6 @@ module.exports = {
   updateProfile,
   changePassword,
   getUsers,
-  updateUser
+  updateUser,
+  testAuth
 };

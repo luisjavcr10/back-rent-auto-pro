@@ -9,6 +9,10 @@ const { handleSequelizeErrors, globalErrorHandler } = require('./middleware/vali
 
 // Import routes
 const authRoutes = require('./routes/auth');
+const vehicleRoutes = require('./routes/vehicles');
+const customerRoutes = require('./routes/customers');
+const rentalRoutes = require('./routes/rentals');
+const maintenanceRoutes = require('./routes/maintenances');
 
 // Import database
 const { syncDatabase } = require('./models');
@@ -70,9 +74,13 @@ app.get('/health', (req, res) => {
 });
 
 /**
- * API Routes
+ * Routes
  */
 app.use('/api/auth', authRoutes);
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/customers', customerRoutes);
+app.use('/api/rentals', rentalRoutes);
+app.use('/api/maintenances', maintenanceRoutes);
 
 /**
  * Swagger Documentation

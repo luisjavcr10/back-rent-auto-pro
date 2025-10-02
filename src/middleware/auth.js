@@ -6,21 +6,29 @@ const { User } = require('../models');
  */
 const authenticateToken = async (req, res, next) => {
   try {
+    console.log('🔐 Auth middleware - Headers:', req.headers['authorization']);
+    
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
     if (!token) {
+      console.log('❌ Auth middleware - No token provided');
       return res.status(401).json({
         success: false,
         message: 'Token de acceso requerido'
       });
     }
 
+    console.log('🔑 Auth middleware - Token found, verifying...');
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('✅ Auth middleware - Token decoded:', { userId: decoded.userId });
     
     // Find user and check if still active
     const user = await User.findByPk(decoded.userId);
+    console.log('👤 Auth middleware - User found:', user ? { id: user.id, role: user.role, is_active: user.is_active } : 'null');
+    
     if (!user || !user.is_active) {
+      console.log('❌ Auth middleware - User not found or inactive');
       return res.status(401).json({
         success: false,
         message: 'Usuario no válido o inactivo'
@@ -28,8 +36,11 @@ const authenticateToken = async (req, res, next) => {
     }
 
     req.user = user;
+    console.log('✅ Auth middleware - User set in req.user:', { id: user.id, role: user.role });
     next();
   } catch (error) {
+    console.error('❌ Auth middleware error:', error);
+    
     if (error.name === 'JsonWebTokenError') {
       return res.status(403).json({
         success: false,
@@ -43,7 +54,6 @@ const authenticateToken = async (req, res, next) => {
       });
     }
     
-    console.error('Auth middleware error:', error);
     return res.status(500).json({
       success: false,
       message: 'Error interno del servidor'
@@ -56,20 +66,28 @@ const authenticateToken = async (req, res, next) => {
  */
 const requireRole = (...roles) => {
   return (req, res, next) => {
+    console.log('🛡️ Role middleware - Required roles:', roles);
+    console.log('👤 Role middleware - User in req:', req.user ? { id: req.user.id, role: req.user.role } : 'null');
+    
     if (!req.user) {
+      console.log('❌ Role middleware - No user in request');
       return res.status(401).json({
         success: false,
         message: 'Usuario no autenticado'
       });
     }
 
+    console.log('🔍 Role middleware - Checking if role', req.user.role, 'is in', roles);
+    
     if (!roles.includes(req.user.role)) {
+      console.log('❌ Role middleware - Role not authorized:', req.user.role, 'not in', roles);
       return res.status(403).json({
         success: false,
         message: 'No tienes permisos para realizar esta acción'
       });
     }
 
+    console.log('✅ Role middleware - Access granted for role:', req.user.role);
     next();
   };
 };

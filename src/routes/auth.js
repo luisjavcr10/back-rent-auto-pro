@@ -7,9 +7,11 @@ const {
   updateProfile,
   changePassword,
   getUsers,
-  updateUser
+  updateUser,
+  testAuth
 } = require('../controllers/authController');
-const { authenticateToken, requireAdmin } = require('../middleware/auth');
+const { requireAdmin } = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 const { handleValidationErrors } = require('../middleware/validation');
 
 const router = express.Router();
@@ -418,5 +420,9 @@ router.get('/users', authenticateToken, requireAdmin, getUsers);
  *         description: Usuario no encontrado
  */
 router.put('/users/:id', authenticateToken, requireAdmin, updateProfileValidation, handleValidationErrors, updateUser);
+
+// Test routes
+router.get('/test-auth', authenticateToken, testAuth);
+router.get('/test-admin', authenticateToken, requireAdmin, testAuth);
 
 module.exports = router;
