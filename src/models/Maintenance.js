@@ -13,7 +13,7 @@ const Maintenance = sequelize.define('Maintenance', {
   },
   maintenance_number: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
     unique: true
   },
   vehicle_id: {

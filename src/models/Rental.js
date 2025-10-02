@@ -13,7 +13,7 @@ const Rental = sequelize.define('Rental', {
   },
   rental_number: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
     unique: true
   },
   customer_id: {

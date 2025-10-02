@@ -13,6 +13,7 @@ const vehicleRoutes = require('./routes/vehicles');
 const customerRoutes = require('./routes/customers');
 const rentalRoutes = require('./routes/rentals');
 const maintenanceRoutes = require('./routes/maintenances');
+const reportsRoutes = require('./routes/reports');
 
 // Import database
 const { syncDatabase } = require('./models');
@@ -74,13 +75,14 @@ app.get('/health', (req, res) => {
 });
 
 /**
- * Routes
+ * API Routes
  */
 app.use('/api/auth', authRoutes);
 app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/rentals', rentalRoutes);
 app.use('/api/maintenances', maintenanceRoutes);
+app.use('/api/reports', reportsRoutes);
 
 /**
  * Swagger Documentation
